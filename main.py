@@ -5,8 +5,10 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
    return 'Hello World!'
+import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from transformers import pipeline, set_seed
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu' ) # 定义device对象
 tokenizer = AutoTokenizer.from_pretrained("Gustavosta/MagicPrompt-Stable-Diffusion")
 model = AutoModelForCausalLM.from_pretrained("Gustavosta/MagicPrompt-Stable-Diffusion")
 @app.route('/prompt')
