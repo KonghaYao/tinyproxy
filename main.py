@@ -11,10 +11,12 @@ from transformers import pipeline, set_seed
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu' ) # 定义device对象
 tokenizer = AutoTokenizer.from_pretrained("Gustavosta/MagicPrompt-Stable-Diffusion")
 model = AutoModelForCausalLM.from_pretrained("Gustavosta/MagicPrompt-Stable-Diffusion")
+generator = pipeline('text-generation', model='Gustavosta/MagicPrompt-Stable-Diffusion')
+
+
 @app.route('/prompt')
 def prompt():
     input = request.arg.get('input')
-    generator = pipeline('text-generation', model='Gustavosta/MagicPrompt-Stable-Diffusion')
 #     set_seed(42)
     return generator(input, max_length=30, num_return_sequences=3)
 #运行
