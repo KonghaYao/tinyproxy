@@ -13,8 +13,8 @@ model = AutoModelForCausalLM.from_pretrained("Gustavosta/MagicPrompt-Stable-Diff
 def prompt():
     input = request.arg.get('input')
     generator = pipeline('text-generation', model='Gustavosta/MagicPrompt-Stable-Diffusion')
-    set_seed(42)
+#     set_seed(42)
     return generator(input, max_length=30, num_return_sequences=3)
 #运行
 if __name__ == '__main__':
-    app.run()
+    app.run(host='127.0.0.1',port=8888)
