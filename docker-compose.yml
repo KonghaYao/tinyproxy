@@ -1,7 +1,0 @@
-version: 3
-services:
-  proxy:
-    build: .
-    command: sh -c 'python /app/run/main.py'
-    ports:
-      - 8888:8888
