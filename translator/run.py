@@ -1,10 +1,11 @@
-from flask import request,Flask,jsonify
+from flask import request, Flask, jsonify, make_response
 from translatepy import Translator
 from translatepy import Language
 from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 translator = Translator()
 cors = CORS(app)
+
 
 @app.route('/translate')
 @cross_origin()
@@ -13,11 +14,14 @@ def prompt():
         text = request.values.get('text')
         source = request.values.get('source')
         target = request.values.get('target')
-        data =  translator.translate(text, source_language=source, destination_language=target)
+        data = translator.translate(
+            text, source_language=source, destination_language=target)
         return jsonify(data.as_json())
     except Exception as e:
         print(e)
-        return jsonify({"error":100})
+        return jsonify({"error": 100})
+
+
 @app.after_request
 def after(resp):
     '''
@@ -31,5 +35,7 @@ def after(resp):
     resp.headers['Access-Control-Allow-Methods'] = 'GET,POST'
     resp.headers['Access-Control-Allow-Headers'] = 'x-requested-with,content-type'
     return resp
+
+
 if __name__ == '__main__':
-    app.run(host='127.0.0.1',port=80)
+    app.run(host='127.0.0.1', port=80)
