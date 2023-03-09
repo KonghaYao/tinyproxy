@@ -16,7 +16,7 @@ def prompt():
         target = request.values.get('target')
         data = translator.translate(
             text, source_language=source, destination_language=target)
-        return jsonify(data.as_json())
+        return data.as_json()
     except Exception as e:
         print(e)
         return jsonify({"error": 100})
