@@ -1,6 +1,7 @@
 version: "3"
+
 services:
-    proxy:
+    magic-prompt:
         build: .
         volumes:
             - ./model:/app/paddle/model
