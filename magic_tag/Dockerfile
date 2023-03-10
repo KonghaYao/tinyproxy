@@ -1,4 +1,4 @@
-FROM  paddlepaddle/paddle:2.4.0-cpu
+FROM python:3.10.10-slim
 WORKDIR /app/paddle
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
