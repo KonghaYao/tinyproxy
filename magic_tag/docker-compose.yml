@@ -3,7 +3,7 @@ version: "3"
 services:
     magic-prompt:
         build: .
-        volumes:
-            - ./model:/app/paddle/model
+        # volumes:
+        #     - ./model:/app/paddle/model
         ports:
             - 8080:8080
