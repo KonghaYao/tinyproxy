@@ -14,21 +14,20 @@ cors = CORS(app)
 
 class Config(object):
 
-    version = 'full/v1'  # 保存模型的名字
-    # filepath = ["data/data179258/dark_magics.txt"] # 涩涩魔咒
     batch_size = 64
     num_workers = 16
-    epochs = 100
-    embedding_dim = 300
-    hidden_dim = 512
+    epochs = 40  # 训练多少个循环
+    embedding_dim = 100
+    hidden_dim = 258
     num_layers = 3
     learning_rate = 0.001  # 在此任务中，经验表明，不建议设置太高，
 
     maxl = 120  # 截断or padding的长度
     plot_interval = 1000  # 每间隔plot_interval输出一次
-    max_gen_len = 40  # 生成长度
+    max_gen_len = 110  # 生成的文本最大长度(max_gen_len<=maxl否则会导致诗句残缺)
 
     prefix = '',
+    beginning = '8k'
 
 
 config = Config()
@@ -64,7 +63,7 @@ def prompt():
             "memory": memory  # 记忆力，指当前数据和前面的n个数据不会重复
         }, config, poetry, vocab, tokenizer)
         print(time_delta, 'ms')
-        
+
         return jsonify({"text": tokenizer.convert_tokens_to_string(arr), "time": time_delta})
     except Exception as e:
         print(e)
@@ -82,5 +81,5 @@ def after(resp):
 
 if __name__ == '__main__':
     # app.debug = True
-    
+
     app.run(host='127.0.0.1', port=8080)
