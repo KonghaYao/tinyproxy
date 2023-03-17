@@ -1,4 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.178.0/testing/asserts.ts";
+import { cors } from "../../plugins/cors/index.ts";
 import { createServer } from "../index.ts";
 
 const server = createServer({
@@ -6,15 +7,10 @@ const server = createServer({
         return new Response("null");
     },
     "/get": [
-        [
-            async (ctx, next) => {
-                console.log("进入1");
-                await next();
-                ctx.res = new Response(ctx.res!.body, {
-                    headers: { "access-allow": "*" },
-                });
-            },
-        ],
+        cors({
+            origin: "*",
+        }),
+
         () => {
             console.log("进入2");
             return new Response("get");
@@ -29,6 +25,7 @@ Deno.test(async function normal() {
     assertEquals(data, "null");
 });
 Deno.test(async function middlewareTest() {
-    const data = await server(baseURL("/get")).then((res) => res.headers);
-    assertEquals(data.get("access-allow"), "*");
+    const data = await server(baseURL("/get"));
+    console.log([...data.headers.entries()]);
+    assertEquals(data.headers.get("access-allow-control-origin"), "*");
 });

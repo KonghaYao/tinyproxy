@@ -1,11 +1,5 @@
-/** 复制头部 */
-const cloneHeaders = (headers: Headers) => {
-    const newHeader = new Headers();
-    for (let i of headers.entries()) {
-        newHeader.append(...i);
-    }
-    return newHeader;
-};
+import { cloneHeaders } from "../../src/index.ts";
+
 /** 重写请求头部信息 */
 const ReqHeadersRewrite = (req: Request, Url: URL) => {
     const newH = cloneHeaders(req.headers);
