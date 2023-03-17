@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.178.0/testing/asserts.ts";
-import { cors } from "../../plugins/cors/index.ts";
-import { createServer } from "../index.ts";
-
+// import { cors } from "../../plugins/cors/index.ts";
+import { createServer, Middleware } from "../index.ts";
+import cors from "https://esm.sh/@koa/cors@4.0.0";
 const server = createServer({
     "/": () => {
         return new Response("null");
@@ -9,7 +9,7 @@ const server = createServer({
     "/get": [
         cors({
             origin: "*",
-        }),
+        }) as unknown as Middleware,
 
         () => {
             return new Response("get");

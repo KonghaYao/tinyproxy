@@ -45,6 +45,9 @@ const createContext = (req: Request) => {
                 this.res.status = num;
             }
         },
+        vary(str: string) {
+            this.res.headers.set("vary", str);
+        },
         get status() {
             return this.res?.status!;
         },
