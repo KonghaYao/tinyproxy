@@ -7,7 +7,7 @@ export const cors: ServerPlugin<
         allowHeaders: string[] | string;
         keepHeadersOnError: boolean | undefined;
         origin: string | ((ctx: Context) => string);
-        credentials: ((ctx: Context) => string) | true;
+        credentials: ((ctx: Context) => boolean) | true;
         secureContext: string | boolean;
         maxAge: string;
         privateNetworkAccess: string;
@@ -120,7 +120,8 @@ export const cors: ServerPlugin<
             // If there is no Access-Control-Request-Method header or if parsing failed,
             // do not set any additional headers and terminate this set of steps.
             // The request is outside the scope of this specification.
-            if (!ctx.req.headers.get("Access-Control-Request-Method")) {
+            // console.log(ctx, ctx.get("Access-Control-Request-Method"));
+            if (!ctx.get("Access-Control-Request-Method")) {
                 // this not preflight request, ignore it
                 return await next();
             }

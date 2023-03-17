@@ -12,13 +12,12 @@ const server = createServer({
         }),
 
         () => {
-            console.log("进入2");
             return new Response("get");
         },
     ],
 });
-const baseURL = (path: string) => {
-    return new Request("https://example.com" + path);
+const baseURL = (path: string, init?: RequestInit) => {
+    return new Request("https://example.com" + path, init);
 };
 Deno.test(async function normal() {
     const data = await server(baseURL("/")).then((res) => res.text());
@@ -26,6 +25,7 @@ Deno.test(async function normal() {
 });
 Deno.test(async function middlewareTest() {
     const data = await server(baseURL("/get"));
-    console.log([...data.headers.entries()]);
-    assertEquals(data.headers.get("access-allow-control-origin"), "*");
+    // console.log([...data.headers.entries()]);
+
+    assertEquals(data.headers.get("access-control-allow-origin"), "*");
 });

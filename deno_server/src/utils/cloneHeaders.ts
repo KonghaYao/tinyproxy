@@ -6,3 +6,15 @@ export const cloneHeaders = (headers: Headers) => {
     }
     return newHeader;
 };
+
+export const assignHeaders = (
+    header1: Headers,
+    header2: Headers,
+    overwrite = false
+) => {
+    // console.log([...header1.entries()], [...header2.entries()]);
+    for (const i of header2.entries()) {
+        header1[overwrite ? "set" : "append"](...i);
+    }
+    return header1;
+};
