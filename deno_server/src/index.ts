@@ -31,16 +31,29 @@ export const HandleToMiddleware: ServerPlugin<{ handle: Handle }> =
         return next();
     };
 
-export const createServer = (config: Record<string, Handle | HandleObj>) => {
+export const createServer = (
+    config: Record<string, Handle | HandleObj>,
+    opts: Partial<{
+        plugins: Middleware[];
+    }> = {}
+) => {
     const handlesArr: ((ctx: Context) => Handle)[] = Object.entries(config).map(
         ([key, h]) => {
-            const getParams = match(key, { decode: decodeURIComponent });
+            let getParams: (str: string) => boolean;
+            try {
+                // deno-lint-ignore no-explicit-any
+                getParams = match(key, { decode: decodeURIComponent }) as any;
+            } catch (e) {
+                console.error(e);
+                throw new Error(`path regexp compile error: ${key}`);
+            }
             const obj = h instanceof Function ? ([h] as HandleObj) : h;
             const handle = obj[obj.length - 1] as Handle;
-            const middlewares = obj.slice(0, obj.length - 1) as Middleware[];
+            const middleware = obj.slice(0, obj.length - 1) as Middleware[];
 
             const composedFunc = compose([
-                ...middlewares,
+                ...(opts?.plugins ?? []),
+                ...middleware,
                 HandleToMiddleware({ handle }),
             ]);
             return (ctx) => (req) =>
@@ -65,10 +78,14 @@ export const createServer = (config: Record<string, Handle | HandleObj>) => {
     );
     return async (...args: Parameters<Handle>): Promise<Response> => {
         const ctx = new Context(args[0]);
-        for (const iterator of handlesArr) {
-            const res = await iterator(ctx)(...args);
+        try {
+            for (const iterator of handlesArr) {
+                const res = await iterator(ctx)(...args);
 
-            if (res instanceof Response) return res;
+                if (res instanceof Response) return res;
+            }
+        } catch (e) {
+            console.error(e);
         }
         return ctx.res;
     };

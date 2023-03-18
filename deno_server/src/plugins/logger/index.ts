@@ -34,18 +34,18 @@ export const logMethod = (str: string) => {
 };
 export const logger: ServerPlugin<{}> = (opt) => {
     return async (ctx, next) => {
-        console.log(
-            chalk.bold(
-                `==>  `,
-                chalk.blue(ctx.req.url),
-                logMethod(ctx.req.method)
-            )
-        );
+        // console.log(
+        //     chalk.bold(
+        //         chalk.red(`==>`),
+        //         chalk.blue(ctx.req.url),
+        //         logMethod(ctx.req.method)
+        //     )
+        // );
         console.log(ctx);
         await next();
         console.log(
             chalk.bold(
-                `<==  `,
+                chalk.green(`| <== `),
                 chalk.blue(ctx.req.url),
                 logMethod(ctx.req.method),
                 logStatus(ctx.status)

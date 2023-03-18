@@ -3,18 +3,20 @@ import { proxy } from "../index.ts";
 import { createServer } from "../../../index.ts";
 import { logger } from "../../logger/index.ts";
 
-const server = createServer({
-    "/bin/(.*)": [
-        logger({}),
-        proxy({
-            host: "httpbin.org",
-            rewrite(path) {
-                console.log(path);
-                return path.replace("/bin", "");
-            },
-        }),
-    ],
-});
+const server = createServer(
+    {
+        "/bin/(.*)": [
+            proxy({
+                host: "httpbin.org",
+                rewrite(path) {
+                    // console.log(path);
+                    return path.replace("/bin", "");
+                },
+            }),
+        ],
+    },
+    { plugins: [logger({})] }
+);
 const baseURL = (path: string, init?: RequestInit) => {
     return new Request("https://example.com" + path, init);
 };

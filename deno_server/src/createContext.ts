@@ -1,12 +1,17 @@
 import { parse } from "https://esm.sh/qs";
 import { MatchedPath } from "./index.ts";
 import { ServerResponse } from "./ServerResponse.ts";
+import Cookies from "https://esm.sh/cookies@0.8.0";
+const COOKIES = Symbol("context#cookies");
 export class Context {
     constructor(public req: Request) {}
     res = new ServerResponse(null, {
         status: 404,
         statusText: "It's an error of deno-server",
     });
+    get request() {
+        return this.req;
+    }
     get(name: string) {
         return this.req.headers.get(name);
     }
@@ -49,5 +54,21 @@ export class Context {
     }
     throw(status: number, statusText: string, opts?: ResponseInit) {
         this.res = new ServerResponse(null, { status, statusText, ...opts });
+    }
+
+    [COOKIES]!: Cookies;
+    get cookies() {
+        if (!this[COOKIES]) {
+            // Cookie 的写入未解决
+            // this[COOKIES] = new Cookies(this.req as any, this.res, {
+            //     keys: this.app.keys,
+            //     secure: this.request.secure,
+            // });
+        }
+        return this[COOKIES];
+    }
+
+    set cookies(_cookies) {
+        this[COOKIES] = _cookies;
     }
 }
