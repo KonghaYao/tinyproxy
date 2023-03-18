@@ -1,17 +1,27 @@
-import { pathToRegexp } from "https://esm.sh/path-to-regexp@6.2.1";
+import { match } from "https://esm.sh/path-to-regexp@6.2.1";
 import compose from "https://esm.sh/koa-compose@4.1.0";
 import { cloneHeaders } from "./utils/cloneHeaders.ts";
 import { ServerResponse } from "./ServerResponse.ts";
-export { cloneHeaders };
+import { Context } from "./createContext.ts";
+
+export { cloneHeaders, Context };
+
+export type MatchedPath<T = Record<string, unknown>> = {
+    path: string;
+    index: number;
+    params: T;
+};
+
 export type ServerPlugin<Config> = (config: Config) => Middleware;
+export type HandlePlugin<Config> = (config: Config) => Handle;
 export interface Handle {
     (req: Request): Response | Promise<Response>;
 }
 export type HandleObj = [...Middleware[], Handle];
-export type Context = ReturnType<typeof createContext>;
 export type Middleware = compose.Middleware<Context>;
 
-const HandleToMiddleware: ServerPlugin<{ handle: Handle }> =
+/** 服务数组的最后一项为 Handle，直接处理 Response */
+export const HandleToMiddleware: ServerPlugin<{ handle: Handle }> =
     ({ handle }) =>
     async (ctx, next) => {
         const res = await handle(ctx.req);
@@ -21,42 +31,10 @@ const HandleToMiddleware: ServerPlugin<{ handle: Handle }> =
         return next();
     };
 
-const createContext = (req: Request) => {
-    return {
-        req,
-        res: new Response(null, {
-            status: 404,
-            statusText: "It's an error of deno-server",
-        }),
-        get(name: string) {
-            return this.req.headers.get(name);
-        },
-        set(name: string, value: string | null) {
-            if (!this.res)
-                throw new Error("'res' can't be found on server context");
-            return this.res?.headers.set(name, value as string);
-        },
-        get method() {
-            return this.req.method;
-        },
-        set status(num: number) {
-            if (this.res?.status) {
-                // @ts-ignore ignore: 头部可以被改写
-                this.res.status = num;
-            }
-        },
-        vary(str: string) {
-            this.res.headers.set("vary", str);
-        },
-        get status() {
-            return this.res?.status!;
-        },
-    };
-};
 export const createServer = (config: Record<string, Handle | HandleObj>) => {
     const handlesArr: ((ctx: Context) => Handle)[] = Object.entries(config).map(
         ([key, h]) => {
-            const regexp = pathToRegexp(key);
+            const getParams = match(key, { decode: decodeURIComponent });
             const obj = h instanceof Function ? ([h] as HandleObj) : h;
             const handle = obj[obj.length - 1] as Handle;
             const middlewares = obj.slice(0, obj.length - 1) as Middleware[];
@@ -67,8 +45,13 @@ export const createServer = (config: Record<string, Handle | HandleObj>) => {
             ]);
             return (ctx) => (req) =>
                 new Promise<Response>((resolve) => {
-                    const matched = regexp.exec(new URL(req.url).pathname);
+                    const matched = getParams(
+                        new URL(req.url).pathname
+                    ) as unknown as MatchedPath;
+                    // console.log(matched);
+
                     if (matched) {
+                        ctx._setPathParams(matched);
                         // const ctx = createContext(req);
                         composedFunc(ctx).then(() => {
                             resolve(ctx.res!);
@@ -81,7 +64,7 @@ export const createServer = (config: Record<string, Handle | HandleObj>) => {
         }
     );
     return async (...args: Parameters<Handle>): Promise<Response> => {
-        const ctx = createContext(args[0]);
+        const ctx = new Context(args[0]);
         for (const iterator of handlesArr) {
             const res = await iterator(ctx)(...args);
 

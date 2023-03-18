@@ -1,4 +1,4 @@
-import { cloneHeaders } from "../../src/index.ts";
+import { cloneHeaders, HandlePlugin } from "../../index.ts";
 
 /** 重写请求头部信息 */
 const ReqHeadersRewrite = (req: Request, Url: URL) => {
@@ -22,6 +22,24 @@ const ResHeadersReWrite = (res: Response, domain: string) => {
     newHeader.delete("X-Frame-Options"); // 防止不准 iframe 嵌套
     return newHeader;
 };
+
+/**
+ * 代理一个地址，自动处理 cors 和一些 cookie 的问题
+ * @example createServer({
+ *      '/google':[
+ *          proxy({host:'www.google.com'})
+ *      ]
+ * })
+ */
+export const proxy: HandlePlugin<Options> = (opt) => {
+    return (req) => {
+        return _proxy(opt.host, req, opt);
+    };
+};
+interface Options {
+    host: string;
+    rewrite?: (path: string, Url: URL) => string;
+}
 /** 代理整个路径后面的请求，包括所有请求模式
  * @example 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
@@ -29,10 +47,13 @@ import { createServer,proxy } from "https://esm.sh/deno-server@1.0.0";
 
 serve((req: Request) => proxy('google.com',req));
  */
-export const proxy = (host: string, req: Request) => {
+export const _proxy = (host: string, req: Request, opt: Options) => {
     // const Url = getTransparentURL(req);
     const Url = new URL(req.url);
     Url.host = host;
+
+    opt.rewrite && (Url.pathname = opt.rewrite(Url.pathname, Url));
+    // console.log(Url);
     if (Url instanceof Response) return Url;
     // console.log(Url.toString());
 
@@ -50,10 +71,10 @@ export const proxy = (host: string, req: Request) => {
             statusText: res.statusText,
             headers: newHeader,
         };
-        console.log(res.status, res.url);
+        // console.log(res.status, res.url);
         // 维持重定向,304 Not Modify 不需要重定向
         if (res.status >= 300 && res.status < 400 && res.status !== 304) {
-            console.log(res.status, "重定向至", req.url);
+            // console.log(res.status, "重定向至", req.url);
             return Response.redirect(req.url, res.status);
         }
         return new Response(res.body, config);
