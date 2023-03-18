@@ -1,4 +1,4 @@
-import { cloneHeaders, HandlePlugin } from "../../index.ts";
+import { cloneHeaders, Context, HandlePlugin } from "../../index.ts";
 
 /** 重写请求头部信息 */
 const ReqHeadersRewrite = (req: Request, Url: URL) => {
@@ -33,12 +33,17 @@ const ResHeadersReWrite = (res: Response, domain: string) => {
  */
 export const proxy: HandlePlugin<Options> = (opt) => {
     return (req) => {
+        const url = new URL(req.url);
+        if (opt.filter && opt.filter(url.pathname, url)) {
+            return;
+        }
         return _proxy(opt.host, req, opt);
     };
 };
 interface Options {
     host: string;
     rewrite?: (path: string, Url: URL) => string;
+    filter?: (path: string, Url: URL) => string;
 }
 /** 代理整个路径后面的请求，包括所有请求模式
  * @example 

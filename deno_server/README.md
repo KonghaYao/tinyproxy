@@ -8,7 +8,7 @@ import {
     createServer,
     middleware,
 } from "https://esm.sh/deno-server/src/index.ts";
-import cors from "https://esm.sh/@koa/cors@4.0.0"; // some koa plugin can just to use in the system
+import { cors } from "https://esm.sh/deno-server/src/plugins.ts";
 const S = createServer({
     "/": () => {
         return new Response("null");

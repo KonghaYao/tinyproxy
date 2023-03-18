@@ -41,7 +41,7 @@ export const logger: ServerPlugin<{}> = (opt) => {
         //         logMethod(ctx.req.method)
         //     )
         // );
-        console.log(ctx);
+        // console.log(ctx);
         await next();
         console.log(
             chalk.bold(

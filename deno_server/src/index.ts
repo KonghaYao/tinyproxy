@@ -15,7 +15,7 @@ export type MatchedPath<T = Record<string, unknown>> = {
 export type ServerPlugin<Config> = (config: Config) => Middleware;
 export type HandlePlugin<Config> = (config: Config) => Handle;
 export interface Handle {
-    (req: Request): Response | Promise<Response>;
+    (req: Request): Response | Promise<Response> | void | Promise<void>;
 }
 export type HandleObj = [...Middleware[], Handle];
 export type Middleware = compose.Middleware<Context>;
@@ -25,6 +25,8 @@ export const HandleToMiddleware: ServerPlugin<{ handle: Handle }> =
     ({ handle }) =>
     async (ctx, next) => {
         const res = await handle(ctx.req);
+        // 提前结束
+        if (!res) return next();
         // console.log(ctx.res);
         ctx.res = ServerResponse.assignResponse(ctx.res, res);
         // console.log(res);
@@ -77,9 +79,9 @@ export const createServer = (
         }
     );
     return async (...args: Parameters<Handle>): Promise<Response> => {
-        const ctx = new Context(args[0]);
         try {
             for (const iterator of handlesArr) {
+                const ctx = new Context(args[0]);
                 const res = await iterator(ctx)(...args);
 
                 if (res instanceof Response) return res;
@@ -87,6 +89,9 @@ export const createServer = (
         } catch (e) {
             console.error(e);
         }
-        return ctx.res;
+        return new ServerResponse(null, {
+            status: 404,
+            statusText: "Deno not found",
+        });
     };
 };
