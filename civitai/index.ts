@@ -66,8 +66,8 @@ const text = await Deno.readTextFile("./index/index.filter.jsonl");
 const array = text.split("\n");
 
 // 修改 cursor 和 index 可以进行断点重传
-let cursor: null | number = 1991;
-for (let index = 0; index < array.length; index++) {
+let cursor: null | number = null;
+for (let index = 5398; index < array.length; index++) {
     const element = array[index];
     console.log(index);
     await getPostUnderModel(JSON.parse(element).id, cursor);
