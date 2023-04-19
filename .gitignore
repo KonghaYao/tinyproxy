@@ -4,3 +4,7 @@ node_modules
 dist
 civitai/data
 civitai/index
+*.zip
+.data
+temp
+all_prompts.txt

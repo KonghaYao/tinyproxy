@@ -1,0 +1,1 @@
+curl -O -L https://huggingface.co/datasets/FredZhang7/stable-diffusion-prompts-2.47M/resolve/main/all_prompts.txt

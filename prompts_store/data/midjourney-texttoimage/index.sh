@@ -1,0 +1,1 @@
+unzip archive.zip -d ./.data
