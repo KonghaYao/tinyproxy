@@ -1,0 +1,170 @@
+{
+    "err_no": 0,
+    "err_msg": "success",
+    "data": [
+        {
+            "item_type": 2,
+            "item_info": {
+                "article_id": "7229220276847181882",
+                "article_info": {
+                    "article_id": "7229220276847181882",
+                    "user_id": "1538972006755838",
+                    "category_id": "6809637773935378440",
+                    "tag_ids": [
+                        6809640642101116936,
+                        6809640525595934734,
+                        6809640448827588622
+                    ],
+                    "visible_level": 0,
+                    "link_url": "",
+                    "cover_image": "",
+                    "is_gfw": 0,
+                    "title": "机器学习基础-监督学习-测试数据之F1值和ROC曲线",
+                    "brief_content": "F1 值是衡量二分类模型性能的一种指标，它是精确率和召回率的调和平均数，可以综合考虑模型的准确性和召回率。ROC 曲线是用于评估二分类模型性能的一种常用工具。",
+                    "is_english": 0,
+                    "is_original": 1,
+                    "user_index": 11.458123037238812,
+                    "original_type": 0,
+                    "original_author": "",
+                    "content": "",
+                    "ctime": "1683186601",
+                    "mtime": "1683186604",
+                    "rtime": "1683186604",
+                    "draft_id": "7229217442424881210",
+                    "view_count": 284,
+                    "collect_count": 1,
+                    "digg_count": 1,
+                    "comment_count": 0,
+                    "hot_index": 15,
+                    "is_hot": 0,
+                    "rank_index": 0.63584574,
+                    "status": 2,
+                    "verify_status": 1,
+                    "audit_status": 2,
+                    "mark_content": "",
+                    "display_count": 0,
+                    "is_markdown": 1,
+                    "app_html_content": ""
+                },
+                "author_user_info": {
+                    "user_id": "1538972006755838",
+                    "user_name": "欧阳胖胖",
+                    "company": "Tiger",
+                    "job_title": "NLLD",
+                    "avatar_large": "https://p9-passport.byteacctimg.com/img/user-avatar/b8ea0ea40a8719bce32800280e642c36~300x300.image",
+                    "level": 4,
+                    "description": "我的代码也曾价值上亿",
+                    "followee_count": 6,
+                    "follower_count": 121,
+                    "post_article_count": 29,
+                    "digg_article_count": 613,
+                    "got_digg_count": 44,
+                    "got_view_count": 6045,
+                    "post_shortmsg_count": 542,
+                    "digg_shortmsg_count": 487,
+                    "isfollowed": false,
+                    "favorable_author": 0,
+                    "power": 2864,
+                    "study_point": 0,
+                    "university": {
+                        "university_id": "0",
+                        "name": "",
+                        "logo": ""
+                    },
+                    "major": {
+                        "major_id": "0",
+                        "parent_id": "0",
+                        "name": ""
+                    },
+                    "student_status": 0,
+                    "select_event_count": 0,
+                    "select_online_course_count": 0,
+                    "identity": 0,
+                    "is_select_annual": false,
+                    "select_annual_rank": 0,
+                    "annual_list_type": 0,
+                    "extraMap": {},
+                    "is_logout": 0,
+                    "annual_info": [],
+                    "account_amount": 0,
+                    "user_growth_info": {
+                        "user_id": 1538972006755838,
+                        "jpower": 2864,
+                        "jscore": 12805,
+                        "jpower_level": 4,
+                        "jscore_level": 7,
+                        "jscore_title": "荣誉掘友",
+                        "author_achievement_list": [],
+                        "vip_level": 0,
+                        "vip_title": "",
+                        "jscore_next_level_score": 25000,
+                        "jscore_this_level_mini_score": 7000
+                    },
+                    "is_vip": false,
+                    "become_author_days": 0,
+                    "collection_set_article_count": 0,
+                    "recommend_article_count_daily": 0,
+                    "article_collect_count_daily": 0
+                },
+                "category": {
+                    "category_id": "6809637773935378440",
+                    "category_name": "人工智能",
+                    "category_url": "ai",
+                    "rank": 5,
+                    "back_ground": "https://lc-mhke0kuv.cn-n1.lcfile.com/f7cecf8806e8621ef35e.jpg",
+                    "icon": "https://lc-mhke0kuv.cn-n1.lcfile.com/9b525117507d7a76c4ac.png",
+                    "ctime": 1500876664,
+                    "mtime": 1500876667,
+                    "show_type": 3,
+                    "item_type": 2,
+                    "promote_tag_cap": 4,
+                    "promote_priority": 5
+                },
+                "tags": [
+                    {
+                        "id": 2546696,
+                        "tag_id": "6809640642101116936",
+                        "tag_name": "人工智能",
+                        "color": "#2e6cff",
+                        "icon": "https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/leancloud-assets/9b525117507d7a76c4ac.png~tplv-t2oaga2asx-image.image",
+                        "back_ground": "",
+                        "show_navi": 1,
+                        "ctime": 1472072600,
+                        "mtime": 1683224896,
+                        "id_type": 9,
+                        "tag_alias": "",
+                        "post_article_count": 22880,
+                        "concern_user_count": 232621
+                    }
+                    
+                ],
+                "user_interact": {
+                    "id": 7229220276847181882,
+                    "omitempty": 2,
+                    "user_id": 2656037983238504,
+                    "is_digg": false,
+                    "is_follow": false,
+                    "is_collect": false,
+                    "collect_set_count": 0
+                },
+                "org": {
+                    "org_info": null,
+                    "org_user": null,
+                    "is_followed": false
+                },
+                "req_id": "2023050508261725F34FD23CA6C485959C",
+                "status": {
+                    "push_status": 0
+                },
+                "author_interact": null,
+                "theme_list": null,
+                "extra": {
+                    "boost_type": ""
+                }
+            }
+        }
+    ],
+    "cursor": "eyJ2IjoiNzIyOTM4ODgwNDYxMTkzMjIxNyIsImkiOjgwfQ==",
+    "count": 141817,
+    "has_more": true
+}

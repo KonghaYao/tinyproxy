@@ -6,5 +6,7 @@ civitai/data
 civitai/index
 *.zip
 .data
+data
 temp
 all_prompts.txt
+*.tar.gz
